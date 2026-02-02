@@ -3,6 +3,8 @@
 #include <string>
 #include <sstream>
 
+#include "time.hpp"
+
 int main(int argc, char* argv[]) {
 
     if (argc != 2) {
@@ -25,13 +27,18 @@ int main(int argc, char* argv[]) {
 
     int numTables = 0;
     iStream >> numTables;
-    std::cout << numTables;
     if (!iStream || (numTables <= 0) || (iStream >> rest)) {
         std::cerr << line << '\n';
         return 1;
     }
+    std::getline(file, line);
+    iStream = std::istringstream(line);
 
+    novokhatskiy::Time start{};
+    novokhatskiy::Time end{};
 
+    iStream >> start >> end;
+    std::cout << start << end;
 
     return 0;
 }

@@ -5,11 +5,12 @@
 namespace novokhatskiy {
 
     struct Time {
-        unsigned char minutes;
-        unsigned char hours;
+        unsigned short hours;
+        unsigned short minutes;
     };
 
-    std::istream& operator>>(std::iostream& in, Time& obj);
+    std::istream& operator>>(std::istream& in, Time& time);
+    std::ostream& operator<<(std::ostream& out, const Time& time);
 }
 
 #endif
