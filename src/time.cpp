@@ -25,3 +25,28 @@ std::ostream &novokhatskiy::operator<<(std::ostream &out, const novokhatskiy::Ti
     out << std::setfill('0') << std::setw(2) << time.hours << ':' << std::setw(2) << time.minutes << '\n';
     return out;
 }
+
+bool novokhatskiy::Time::operator<(const novokhatskiy::Time &other) const {
+    return (this->hours < other.hours) || ((this->hours == other.hours) && (this->minutes < other.minutes));
+}
+
+bool novokhatskiy::Time::operator>(const novokhatskiy::Time &other) const {
+    return other < *this;
+}
+
+bool novokhatskiy::Time::operator!=(const novokhatskiy::Time &other) const {
+    return !(*this == other);
+}
+
+bool novokhatskiy::Time::operator==(const novokhatskiy::Time &other) const {
+    return !(*this < other) && !(*this > other);
+}
+
+bool novokhatskiy::Time::operator<=(const novokhatskiy::Time &other) const {
+    return !(*this > other);
+}
+
+bool novokhatskiy::Time::operator>=(const novokhatskiy::Time &other) const {
+    return !(*this < other);
+}
+
