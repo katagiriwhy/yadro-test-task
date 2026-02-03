@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 
-#include "time.hpp"
+#include "time/time.hpp"
 
 int main(int argc, char* argv[]) {
 
@@ -38,7 +38,18 @@ int main(int argc, char* argv[]) {
     novokhatskiy::Time end{};
 
     iStream >> start >> end;
-    std::cout << start << end;
+
+    int price = 0;
+
+    std::getline(file, line);
+    iStream = std::istringstream(line);
+    iStream >> price;
+
+    if (!iStream || (price <= 0) || iStream >> rest) {
+        std::cerr << line << '\n';
+        return 1;
+    }
+
 
     return 0;
 }
