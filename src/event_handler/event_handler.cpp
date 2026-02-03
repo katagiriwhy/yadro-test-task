@@ -1,5 +1,6 @@
 #include "event_handler.hpp"
 #include <string>
+#include <algorithm>
 
 std::string ErrorToString(novokhatskiy::ErrorType e) {
     using namespace novokhatskiy;
@@ -12,4 +13,71 @@ std::string ErrorToString(novokhatskiy::ErrorType e) {
     }
 
     return "";
+}
+
+void novokhatskiy::Event::print(std::ostream& out) const {
+    out << _time << ' ' << _id;
+}
+
+void novokhatskiy::Event::execute(const novokhatskiy::ComputerClub &club) const {
+
+}
+
+novokhatskiy::Time novokhatskiy::Event::getTime() const {
+    return _time;
+}
+
+novokhatskiy::Event::Event(novokhatskiy::Time time, novokhatskiy::EventType type) :
+    _id(0),
+    _type(type),
+    _time(time)
+{}
+
+novokhatskiy::ErrorEvent::ErrorEvent(novokhatskiy::Time time, novokhatskiy::ErrorType error) :
+Event(time, EventType::Outcoming)
+{
+    _id = 13;
+}
+
+void novokhatskiy::ErrorEvent::print(std::ostream &out) const {
+    Event::print(out);
+    out << ' ' << ErrorToString(_error);
+}
+
+bool isValidName(const std::string& name) {
+    if (name.empty()) {
+        return false;
+    }
+
+    constexpr auto pred = [] (unsigned char c) {
+        return (c >= 'a' && c <= 'z') ||
+        (c >= '0' && c <= '9') ||
+        c == '_' ||
+        c == '-';
+    };
+
+    return std::all_of(name.cbegin(), name.cend(), pred);
+}
+
+std::istream &novokhatskiy::operator>>(std::istream &in, std::unique_ptr<ClientEvent> &event) {
+    std::istream::sentry sentry(in);
+    if (!sentry) {
+        return in;
+    }
+
+    unsigned short id = 0;
+    Time time{};
+    std::string name = "";
+
+    in >> time >> id >> name;
+    if (!in) {
+        return in;
+    }
+
+    if (!isValidName(name)) {
+        in.setstate(std::ios::failbit);
+        return in;
+    }
+
+    return in;
 }
