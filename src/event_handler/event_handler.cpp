@@ -20,7 +20,7 @@ void novokhatskiy::Event::print(std::ostream& out) const {
 }
 
 void novokhatskiy::Event::execute(const novokhatskiy::ComputerClub &club) const {
-
+    club.printEvent(*this);
 }
 
 novokhatskiy::Time novokhatskiy::Event::getTime() const {
@@ -80,4 +80,29 @@ std::istream &novokhatskiy::operator>>(std::istream &in, std::unique_ptr<ClientE
     }
 
     return in;
+}
+
+std::ostream &novokhatskiy::operator<<(std::ostream &out, const novokhatskiy::Event &event) {
+    event.print(out);
+    return out;
+}
+
+novokhatskiy::ClientEvent::ClientEvent(Time time, EventType type, const std::string& name) :
+    Event::Event(time, type),
+    _name(name)
+{}
+
+void novokhatskiy::ClientEvent::print(std::ostream &out) const {
+    Event::print(out);
+    out << ' ' << _name;
+}
+
+novokhatskiy::ClientEnteredEvent::ClientEnteredEvent(novokhatskiy::Time time, const std::string &name) :
+    ClientEvent(time, EventType::Incoming, name)
+{
+    _id = 1;
+}
+
+void novokhatskiy::ClientEnteredEvent::execute(const novokhatskiy::ComputerClub &club) const {
+
 }

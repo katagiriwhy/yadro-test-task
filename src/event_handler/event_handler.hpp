@@ -32,19 +32,28 @@ namespace novokhatskiy {
         virtual void print(std::ostream& out) const;
         virtual void execute(const novokhatskiy::ComputerClub& club) const;
     protected:
-        unsigned short _id;
+        unsigned short _id{};
         EventType _type;
-        Time _time;
+        Time _time{};
     };
+
+    std::ostream& operator<<(std::ostream& out, const Event& event);
 
     class ClientEvent : public Event {
     public:
         ClientEvent() = default;
-        ClientEvent(Time time, const std::string& name);
+        ClientEvent(Time time, EventType type, const std::string& name);
         virtual void print(std::ostream& out) const override;
     protected:
         std::string _name;
     };
+
+    class ClientEnteredEvent : public ClientEvent{
+    public:
+        ClientEnteredEvent(Time time, const std::string& name);
+        virtual void execute(const novokhatskiy::ComputerClub& club) const override;
+    };
+
 
     std::istream& operator>>(std::istream& in, std::unique_ptr<ClientEvent>& event);
 

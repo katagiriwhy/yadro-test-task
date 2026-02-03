@@ -52,3 +52,11 @@ bool novokhatskiy::ComputerClub::isQueueEmpty() const {
     return _waitingClients.empty();
 }
 
+novokhatskiy::Time novokhatskiy::ComputerClub::getCurrentTime() const {
+    return _currentTime;
+}
+
+void novokhatskiy::ComputerClub::printEvent(const novokhatskiy::Event &event) {
+    (*_output) << event << '\n';
+}
+

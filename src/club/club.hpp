@@ -9,6 +9,8 @@
 #include <optional>
 
 #include "time/time.hpp"
+#include "event_handler/event_handler.hpp"
+
 
 namespace novokhatskiy {
     struct Table {
@@ -25,11 +27,14 @@ namespace novokhatskiy {
 
         void addClient(const std::string& client);
         void addClientToQueue(const std::string& client);
+        void printEvent(const Event& event);
 
         bool hasAvailableTable() const;
         bool isTableTaken(size_t table) const;
         bool isOpen() const;
         bool isQueueEmpty() const;
+
+        Time getCurrentTime() const;
 
     private:
         size_t _numTables;
