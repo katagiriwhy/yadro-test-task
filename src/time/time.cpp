@@ -1,5 +1,6 @@
 #include "time.hpp"
 #include <iomanip>
+#include "scope_guard/scope_guard.hpp"
 
 std::istream &novokhatskiy::operator>>(std::istream &in, novokhatskiy::Time &time) {
     std::istream::sentry sentry(in);
@@ -22,7 +23,7 @@ std::istream &novokhatskiy::operator>>(std::istream &in, novokhatskiy::Time &tim
 }
 
 std::ostream &novokhatskiy::operator<<(std::ostream &out, const novokhatskiy::Time &time) {
-    // novokhatskiy::ScopeGuard scopeGuard(out);
+    novokhatskiy::ScopeGuard scopeGuard(out);
     out << std::setfill('0') << std::setw(2) << time.hours << ':' << std::setw(2) << time.minutes << '\n';
     return out;
 }
@@ -49,5 +50,45 @@ bool novokhatskiy::Time::operator<=(const novokhatskiy::Time &other) const {
 
 bool novokhatskiy::Time::operator>=(const novokhatskiy::Time &other) const {
     return !(*this < other);
+}
+
+novokhatskiy::Time novokhatskiy::Time::operator-(const novokhatskiy::Time &other) const {
+    unsigned short newHours = 0;
+    unsigned short newMinutes = 0;
+    if (minutes - other.minutes < 0)
+    {
+        newHours = hours - other.hours - 1;
+        newMinutes = minutes - other.minutes + 60;
+    }
+    else
+    {
+        newHours = hours - other.hours;
+        newMinutes = minutes - other.minutes;
+    }
+    if (newHours < 0)
+    {
+        newHours = 23;
+    }
+    return Time{newHours, newMinutes};
+}
+
+novokhatskiy::Time novokhatskiy::Time::operator+(const novokhatskiy::Time &other) const {
+    unsigned short newHours = 0;
+    unsigned short newMinutes = 0;
+    if (minutes + other.minutes > 59)
+    {
+        newHours = hours + other.hours + 1;
+        newMinutes = minutes + other.minutes - 60;
+    }
+    else
+    {
+        newHours = hours + other.hours;
+        newMinutes = minutes + other.minutes;
+    }
+    if (newHours > 23)
+    {
+        newHours = 0;
+    }
+    return Time{newHours, newMinutes};
 }
 

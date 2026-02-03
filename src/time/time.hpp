@@ -14,6 +14,8 @@ namespace novokhatskiy {
         bool operator>=(const Time& other) const;
         bool operator!=(const Time& other) const;
         bool operator==(const Time& other) const;
+        Time operator-(const Time& other) const;
+        Time operator+(const Time& other) const;
     };
 
     std::istream& operator>>(std::istream& in, Time& time);

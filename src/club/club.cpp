@@ -6,6 +6,7 @@ novokhatskiy::ComputerClub::ComputerClub(size_t tables, std::pair<Time, Time> wo
 std::ostream* output) :
     _numTables(tables),
     _workingTime(std::move(workingTime)),
+    _currentTime(),
     _price(price),
     _output(output),
     _tables(),
@@ -16,7 +17,11 @@ std::ostream* output) :
 
     for (size_t i = 0; i < tables; ++i)
         _tables[i + 1] = Table{};
-    (*output) << workingTime.first;
+    (*output) << workingTime.first << '\n';
+}
+
+novokhatskiy::ComputerClub::~ComputerClub() {
+    (*_output) << _workingTime.second << '\n';
 }
 
 void novokhatskiy::ComputerClub::addClient(const std::string &client) {
@@ -25,5 +30,25 @@ void novokhatskiy::ComputerClub::addClient(const std::string &client) {
 
 void novokhatskiy::ComputerClub::addClientToQueue(const std::string &client) {
     _waitingClients.push(client);
+}
+
+bool novokhatskiy::ComputerClub::hasAvailableTable() const {
+    return _tables.size() < _numTables;
+}
+
+bool novokhatskiy::ComputerClub::isTableTaken(size_t table) const {
+    return _tables.find(table) != _tables.cend();
+}
+
+bool novokhatskiy::ComputerClub::isOpen() const {
+    return (_workingTime.first <= _currentTime) && (_currentTime < _workingTime.second);
+}
+
+void novokhatskiy::ComputerClub::updateIncome(const std::string &name) {
+
+}
+
+bool novokhatskiy::ComputerClub::isQueueEmpty() const {
+    return _waitingClients.empty();
 }
 

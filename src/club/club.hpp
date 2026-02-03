@@ -6,11 +6,13 @@
 #include <unordered_map>
 #include <set>
 #include <ostream>
+#include <optional>
 
 #include "time/time.hpp"
 
 namespace novokhatskiy {
     struct Table {
+        std::optional<std::string> client = std::nullopt;
         Time busyFrom{};
         size_t income = 0;
         size_t busyMinutes = 0;
@@ -19,17 +21,27 @@ namespace novokhatskiy {
     class ComputerClub {
     public:
         ComputerClub(size_t tables, std::pair<Time, Time> workingTime, size_t price, std::ostream* output);
+        ~ComputerClub();
+
         void addClient(const std::string& client);
         void addClientToQueue(const std::string& client);
+
+        bool hasAvailableTable() const;
+        bool isTableTaken(size_t table) const;
+        bool isOpen() const;
+        bool isQueueEmpty() const;
 
     private:
         size_t _numTables;
         std::ostream* _output;
         std::pair<Time, Time> _workingTime;
+        Time _currentTime;
         size_t _price;
         std::set<std::string> _clients;
         std::queue<std::string> _waitingClients;
         std::unordered_map<size_t, Table> _tables;
+
+        void updateIncome(const std::string& name);
     };
 }
 
