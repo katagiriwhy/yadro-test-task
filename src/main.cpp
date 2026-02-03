@@ -39,13 +39,18 @@ int main(int argc, char* argv[]) {
 
     iStream >> start >> end;
 
+    if (!iStream || (iStream >> rest) || (start >= end)) {
+        std::cerr << line << '\n';
+        return 1;
+    }
+
     int price = 0;
 
     std::getline(file, line);
     iStream = std::istringstream(line);
     iStream >> price;
 
-    if (!iStream || (price <= 0) || iStream >> rest) {
+    if (!iStream || (price <= 0) || (iStream >> rest)) {
         std::cerr << line << '\n';
         return 1;
     }
