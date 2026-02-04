@@ -180,12 +180,17 @@ void novokhatskiy::ClientSatEvent::execute(novokhatskiy::ComputerClub &club) con
 }
 
 
-novokhatskiy::ClientWaitingEvent::ClientWaitingEvent(novokhatskiy::Time time, const std::string &name) {
-
+novokhatskiy::ClientWaitingEvent::ClientWaitingEvent(novokhatskiy::Time time, const std::string &name) :
+    ClientEvent(time, EventType::Incoming, name)
+{
+    _id = 3;
 }
 
-void novokhatskiy::ClientWaitingEvent::execute
-
-(novokhatskiy::ComputerClub &club) const {
-
+void novokhatskiy::ClientWaitingEvent::execute(novokhatskiy::ComputerClub &club) const {
+    Event::execute(club);
+    if (club.hasAvailableTable()) {
+        ErrorEvent(club.getCurrentTime(), ErrorType::ICanWaitNoLonger).execute(club);
+    } else {
+        club.addClientToQueue(_name);
+    }
 }
