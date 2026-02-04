@@ -56,7 +56,11 @@ novokhatskiy::Time novokhatskiy::ComputerClub::getCurrentTime() const {
     return _currentTime;
 }
 
-void novokhatskiy::ComputerClub::printEvent(const novokhatskiy::Event &event) {
+void novokhatskiy::ComputerClub::printEvent(const novokhatskiy::Event &event) const {
     (*_output) << event << '\n';
+}
+
+bool novokhatskiy::ComputerClub::hasClient(const std::string &name) const {
+    return (_clients.find(name) != _clients.cend());
 }
 

@@ -4,9 +4,10 @@
 #include <memory>
 
 #include "time/time.hpp"
-#include "club/club.hpp"
 
 namespace novokhatskiy {
+
+    class ComputerClub;
 
     enum class EventType {
         Incoming,
@@ -30,7 +31,7 @@ namespace novokhatskiy {
         Time getTime() const;
 
         virtual void print(std::ostream& out) const;
-        virtual void execute(const novokhatskiy::ComputerClub& club) const;
+        virtual void execute(ComputerClub& club) const;
     protected:
         unsigned short _id{};
         EventType _type;
@@ -51,7 +52,7 @@ namespace novokhatskiy {
     class ClientEnteredEvent : public ClientEvent{
     public:
         ClientEnteredEvent(Time time, const std::string& name);
-        virtual void execute(const novokhatskiy::ComputerClub& club) const override;
+        virtual void execute(ComputerClub& club) const override;
     };
 
 

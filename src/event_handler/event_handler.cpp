@@ -1,6 +1,7 @@
 #include "event_handler.hpp"
 #include <string>
 #include <algorithm>
+#include "club/club.hpp"
 
 std::string ErrorToString(novokhatskiy::ErrorType e) {
     using namespace novokhatskiy;
@@ -19,7 +20,7 @@ void novokhatskiy::Event::print(std::ostream& out) const {
     out << _time << ' ' << _id;
 }
 
-void novokhatskiy::Event::execute(const novokhatskiy::ComputerClub &club) const {
+void novokhatskiy::Event::execute(novokhatskiy::ComputerClub &club) const {
     club.printEvent(*this);
 }
 
@@ -84,21 +85,23 @@ std::istream &novokhatskiy::operator>>(std::istream &in, std::unique_ptr<ClientE
             event = std::make_unique<ClientEnteredEvent>(time, name);
             break;
 
-        case 2:
+        case 2: {
             size_t table = 0;
             in >> table;
             if (in && (table > 0)) {
 
             }
             break;
+        }
 
-        case 3:
 
-            break;
-
-        case 4:
-
-            break;
+//        case 3:
+//
+//            break;
+//
+//        case 4:
+//
+//            break;
         default:
             in.setstate(std::ios::failbit);
             break;
@@ -128,6 +131,13 @@ novokhatskiy::ClientEnteredEvent::ClientEnteredEvent(novokhatskiy::Time time, co
     _id = 1;
 }
 
-void novokhatskiy::ClientEnteredEvent::execute(const novokhatskiy::ComputerClub &club) const {
-
+void novokhatskiy::ClientEnteredEvent::execute(novokhatskiy::ComputerClub &club) const {
+    Event::execute(club);
+    if (!club.isOpen()) {
+        ErrorEvent(club.getCurrentTime(), ErrorType::NotOpenYet).execute(club);
+    } else if (club.hasClient(_name)) {
+        ErrorEvent(club.getCurrentTime(), ErrorType::YouShallNotPass).execute(club);
+    } else {
+        club.addClient(_name);
+    }
 }
