@@ -64,3 +64,7 @@ bool novokhatskiy::ComputerClub::hasClient(const std::string &name) const {
     return (_clients.find(name) != _clients.cend());
 }
 
+void novokhatskiy::ComputerClub::assignTable(const std::string &name, size_t table) {
+
+}
+

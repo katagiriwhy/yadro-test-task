@@ -141,3 +141,41 @@ void novokhatskiy::ClientEnteredEvent::execute(novokhatskiy::ComputerClub &club)
         club.addClient(_name);
     }
 }
+
+novokhatskiy::ClientSatEvent::ClientSatEvent(novokhatskiy::Time time, const std::string &name, size_t table,
+                                             novokhatskiy::EventType type) :
+        ClientEvent(time,type,name),
+        _table(table)
+{
+    if (type == EventType::Incoming) {
+        _id = 2;
+    } else {
+        _id = 12;
+    }
+}
+
+size_t novokhatskiy::ClientSatEvent::getTable() const {
+    return _table;
+}
+
+void novokhatskiy::ClientSatEvent::print(std::ostream &out) const {
+    ClientEvent::print(out);
+    out << ' ' << _table;
+}
+
+void novokhatskiy::ClientSatEvent::execute(novokhatskiy::ComputerClub &club) const {
+    Event::execute(club);
+    if (_type == EventType::Incoming) {
+        if (!club.hasClient(_name)) {
+            ErrorEvent(club.getCurrentTime(), ErrorType::ClientUnknown).execute(club);
+            return;
+        }
+        if (club.isTableTaken(_table)) {
+            ErrorEvent(club.getCurrentTime(), ErrorType::PlaceIsBusy).execute(club);
+            return;
+        }
+    }
+    club.assignTable(_name, _table);
+}
+
+
