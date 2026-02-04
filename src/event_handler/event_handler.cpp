@@ -35,7 +35,8 @@ novokhatskiy::Event::Event(novokhatskiy::Time time, novokhatskiy::EventType type
 {}
 
 novokhatskiy::ErrorEvent::ErrorEvent(novokhatskiy::Time time, novokhatskiy::ErrorType error) :
-Event(time, EventType::Outcoming)
+Event(time, EventType::Outcoming),
+_error(error)
 {
     _id = 13;
 }
@@ -179,3 +180,12 @@ void novokhatskiy::ClientSatEvent::execute(novokhatskiy::ComputerClub &club) con
 }
 
 
+novokhatskiy::ClientWaitingEvent::ClientWaitingEvent(novokhatskiy::Time time, const std::string &name) {
+
+}
+
+void novokhatskiy::ClientWaitingEvent::execute
+
+(novokhatskiy::ComputerClub &club) const {
+
+}

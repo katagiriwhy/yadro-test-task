@@ -33,19 +33,46 @@ void novokhatskiy::ComputerClub::addClientToQueue(const std::string &client) {
 }
 
 bool novokhatskiy::ComputerClub::hasAvailableTable() const {
-    return _tables.size() < _numTables;
+    for (const auto& [_, table] : _tables) {
+        if (!table.client)
+            return true;
+    }
+    return false;
+    //return _tables.size() < _numTables;
 }
 
 bool novokhatskiy::ComputerClub::isTableTaken(size_t table) const {
-    return _tables.find(table) != _tables.cend();
+    auto it = _tables.find(table);
+    return it != _tables.end() && it->second.client.has_value();
+    //return _tables.find(table) != _tables.cend();
 }
 
 bool novokhatskiy::ComputerClub::isOpen() const {
     return (_workingTime.first <= _currentTime) && (_currentTime < _workingTime.second);
 }
 
-void novokhatskiy::ComputerClub::updateIncome(const std::string &name) {
+size_t calculateHoursDiff(novokhatskiy::Time after, novokhatskiy::Time before) {
+    novokhatskiy::Time diff = after - before;
+    return diff.hours + ((diff.minutes != 0) ? 1 : 0);
+}
 
+size_t novokhatskiy::ComputerClub::updateIncome(const std::string &name) {
+    for (auto& [tableNum, table] : _tables) {
+        if (table.client && *table.client == name) {
+
+            Time diff = _currentTime - table.busyFrom;
+
+            table.busyMinutes += diff.hours * 60 + diff.minutes;
+
+            size_t hours = calculateHoursDiff(_currentTime, table.busyFrom);
+            table.income += hours * _price;
+
+            table.client.reset();
+
+            return tableNum;
+        }
+    }
+    return 0;
 }
 
 bool novokhatskiy::ComputerClub::isQueueEmpty() const {
@@ -65,6 +92,10 @@ bool novokhatskiy::ComputerClub::hasClient(const std::string &name) const {
 }
 
 void novokhatskiy::ComputerClub::assignTable(const std::string &name, size_t table) {
+    updateIncome(name);
 
+    auto& tmp = _tables.at(table);
+    tmp.client = name;
+    tmp.busyFrom = _currentTime;
 }
 

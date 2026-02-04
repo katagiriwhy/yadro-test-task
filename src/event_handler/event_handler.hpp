@@ -65,6 +65,13 @@ namespace novokhatskiy {
         size_t _table;
     };
 
+    class ClientWaitingEvent: public ClientEvent
+    {
+    public:
+        ClientWaitingEvent(Time time, const std::string& name);
+        virtual void execute(ComputerClub& club) const override;
+    };
+
 
     std::istream& operator>>(std::istream& in, std::unique_ptr<ClientEvent>& event);
 

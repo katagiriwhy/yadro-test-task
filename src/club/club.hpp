@@ -48,7 +48,7 @@ namespace novokhatskiy {
         std::queue<std::string> _waitingClients;
         std::unordered_map<size_t, Table> _tables;
 
-        void updateIncome(const std::string& name);
+        size_t updateIncome(const std::string& name);
     };
 }
 
