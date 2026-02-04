@@ -99,3 +99,17 @@ void novokhatskiy::ComputerClub::assignTable(const std::string &name, size_t tab
     tmp.busyFrom = _currentTime;
 }
 
+size_t novokhatskiy::ComputerClub::removeClient(const std::string &name) {
+    size_t table = updateIncome(name);
+    if (isOpen()) {
+        _clients.erase(name);
+    }
+    return table;
+}
+
+std::string novokhatskiy::ComputerClub::getClientFromQueue() {
+    std::string name = std::move(_waitingClients.front());
+    _waitingClients.pop();
+    return name;
+}
+

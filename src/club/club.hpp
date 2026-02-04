@@ -29,6 +29,8 @@ namespace novokhatskiy {
         void addClientToQueue(const std::string& client);
         void printEvent(const Event& event) const;
         void assignTable(const std::string& name, size_t table);
+        size_t removeClient(const std::string& name);
+        std::string getClientFromQueue();
 
         bool hasClient(const std::string& name) const;
         bool hasAvailableTable() const;

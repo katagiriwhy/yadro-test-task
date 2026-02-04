@@ -72,6 +72,12 @@ namespace novokhatskiy {
         virtual void execute(ComputerClub& club) const override;
     };
 
+    class ClientLeftEvent: public ClientEvent
+    {
+    public:
+        ClientLeftEvent(Time time, const std::string& name, EventType type);
+        virtual void execute(ComputerClub& club) const override;
+    };
 
     std::istream& operator>>(std::istream& in, std::unique_ptr<ClientEvent>& event);
 

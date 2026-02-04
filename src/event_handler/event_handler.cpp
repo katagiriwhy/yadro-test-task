@@ -194,3 +194,29 @@ void novokhatskiy::ClientWaitingEvent::execute(novokhatskiy::ComputerClub &club)
         club.addClientToQueue(_name);
     }
 }
+
+novokhatskiy::ClientLeftEvent::ClientLeftEvent(novokhatskiy::Time time, const std::string &name,
+    novokhatskiy::EventType type)
+{
+    if (_type == EventType::Incoming) {
+        _id = 4;
+    } else {
+        _id = 11;
+    }
+}
+
+void novokhatskiy::ClientLeftEvent::execute(novokhatskiy::ComputerClub &club) const {
+    Event::execute(club);
+    if (_type == EventType::Incoming) {
+        if (!club.hasClient(_name)) {
+            ErrorEvent(club.getCurrentTime(), ErrorType::ClientUnknown).execute(club);
+        } else {
+            size_t table = club.removeClient(_name);
+            if (club.isOpen() && (!club.isQueueEmpty())) {
+                ClientSatEvent(_time, club.getClientFromQueue(), table, EventType::Outcoming).execute(club);
+            }
+        }
+    } else {
+        club.removeClient(_name);
+    }
+}
