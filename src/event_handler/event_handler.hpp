@@ -66,5 +66,4 @@ namespace novokhatskiy {
     };
 }
 
-
 #endif

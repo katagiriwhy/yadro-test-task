@@ -79,6 +79,31 @@ std::istream &novokhatskiy::operator>>(std::istream &in, std::unique_ptr<ClientE
         return in;
     }
 
+    switch (id) {
+        case 1:
+            event = std::make_unique<ClientEnteredEvent>(time, name);
+            break;
+
+        case 2:
+            size_t table = 0;
+            in >> table;
+            if (in && (table > 0)) {
+
+            }
+            break;
+
+        case 3:
+
+            break;
+
+        case 4:
+
+            break;
+        default:
+            in.setstate(std::ios::failbit);
+            break;
+    }
+
     return in;
 }
 
