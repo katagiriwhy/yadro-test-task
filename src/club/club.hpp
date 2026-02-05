@@ -3,7 +3,7 @@
 #include <queue>
 #include <string>
 #include <utility>
-#include <unordered_map>
+#include <map>
 #include <set>
 #include <ostream>
 #include <optional>
@@ -49,9 +49,10 @@ namespace novokhatskiy {
         size_t _price;
         std::set<std::string> _clients;
         std::queue<std::string> _waitingClients;
-        std::unordered_map<size_t, Table> _tables;
+        std::map<size_t, Table> _tables;
 
         size_t updateIncome(const std::string& name);
+        std::string converTimeToString(size_t minutes);
     };
 }
 

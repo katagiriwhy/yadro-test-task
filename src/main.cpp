@@ -2,8 +2,10 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include "time/time.hpp"
+#include "club/club.hpp"
 
 int main(int argc, char* argv[]) {
 
@@ -55,6 +57,33 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    std::vector<std::unique_ptr<novokhatskiy::ClientEvent>> events;
+    events.push_back(std::make_unique<novokhatskiy::ClientEvent>());
+
+    while (std::getline(file, line)) {
+        iStream = std::istringstream(line);
+        auto event = std::make_unique<novokhatskiy::ClientEvent>();
+        iStream >> event;
+
+        if ((!iStream) || (iStream >> rest)) {
+            std::cerr << line << '\n';
+            return 1;
+        }
+
+        if (typeid(*event) == typeid(novokhatskiy::ClientSatEvent)) {
+            size_t table = dynamic_cast<novokhatskiy::ClientSatEvent&>(*event).getTable();
+            if (table > numTables) {
+                std::cerr << line << '\n';
+                return 1;
+            }
+        }
+        events.push_back(std::move(event));
+    }
+    file.close();
+
+    novokhatskiy::ComputerClub club(numTables, {start, end}, price, &std::cout);
+    for (auto iter = events.begin() + 1; iter != events.end(); ++iter)
+        club.executeEvent(**iter);
 
     return 0;
 }

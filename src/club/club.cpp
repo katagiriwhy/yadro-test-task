@@ -1,6 +1,9 @@
 #include "club.hpp"
+#include "scope_guard.hpp"
 
 #include <utility>
+#include <iomanip>
+#include <sstream>
 
 novokhatskiy::ComputerClub::ComputerClub(size_t tables, std::pair<Time, Time> workingTime, size_t price,
 std::ostream* output) :
@@ -13,15 +16,21 @@ std::ostream* output) :
     _clients(),
     _waitingClients()
 {
-    _tables.reserve(tables);
-
     for (size_t i = 0; i < tables; ++i)
         _tables[i + 1] = Table{};
     (*output) << workingTime.first << '\n';
 }
 
 novokhatskiy::ComputerClub::~ComputerClub() {
+    _currentTime = _workingTime.second;
+    for (auto iter = _clients.begin(); iter != _clients.end(); ++iter) {
+        ClientLeftEvent(_currentTime, *iter, EventType::Outcoming).execute(*this);
+    }
     (*_output) << _workingTime.second << '\n';
+
+    for (auto iter = _tables.cbegin(); iter != _tables.cend(); ++iter) {
+        (*_output) << (*iter).first << ' ' << (*iter).second.income << ' ' << converTimeToString(iter->second.busyMinutes) << '\n';
+    }
 }
 
 void novokhatskiy::ComputerClub::addClient(const std::string &client) {
@@ -116,5 +125,17 @@ std::string novokhatskiy::ComputerClub::getClientFromQueue() {
 void novokhatskiy::ComputerClub::executeEvent(const novokhatskiy::ClientEvent &event) {
     _currentTime = event.getTime();
     event.execute(*this);
+}
+
+std::string novokhatskiy::ComputerClub::converTimeToString(size_t totalMinutes) {
+    size_t hours = totalMinutes / 60;
+    size_t minutes = totalMinutes % 60;
+
+    std::ostringstream out;
+    novokhatskiy::ScopeGuard scopeGuard(out);
+    out << std::setw(2) << std::setfill('0') << hours << ':' << std::setw(2) << std::setfill('0') << minutes;
+
+    return out.str();
+
 }
 

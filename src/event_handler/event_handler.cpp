@@ -90,24 +90,19 @@ std::istream &novokhatskiy::operator>>(std::istream &in, std::unique_ptr<ClientE
             size_t table = 0;
             in >> table;
             if (in && (table > 0)) {
-
             }
             break;
         }
-
-
-//        case 3:
-//
-//            break;
-//
-//        case 4:
-//
-//            break;
+        case 3:
+            event = std::make_unique<ClientWaitingEvent>(time, name);
+            break;
+        case 4:
+            event = std::make_unique<ClientLeftEvent>(time, name, EventType::Incoming);
+            break;
         default:
             in.setstate(std::ios::failbit);
             break;
     }
-
     return in;
 }
 
@@ -143,10 +138,9 @@ void novokhatskiy::ClientEnteredEvent::execute(novokhatskiy::ComputerClub &club)
     }
 }
 
-novokhatskiy::ClientSatEvent::ClientSatEvent(novokhatskiy::Time time, const std::string &name, size_t table,
-                                             novokhatskiy::EventType type) :
-        ClientEvent(time,type,name),
-        _table(table)
+novokhatskiy::ClientSatEvent::ClientSatEvent(novokhatskiy::Time time, const std::string &name, size_t table, novokhatskiy::EventType type) :
+    ClientEvent(time,type,name),
+    _table(table)
 {
     if (type == EventType::Incoming) {
         _id = 2;
@@ -196,7 +190,8 @@ void novokhatskiy::ClientWaitingEvent::execute(novokhatskiy::ComputerClub &club)
 }
 
 novokhatskiy::ClientLeftEvent::ClientLeftEvent(novokhatskiy::Time time, const std::string &name,
-    novokhatskiy::EventType type)
+    novokhatskiy::EventType type) :
+    ClientEvent(time, type, name)
 {
     if (_type == EventType::Incoming) {
         _id = 4;
