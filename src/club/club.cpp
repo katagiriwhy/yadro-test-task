@@ -47,13 +47,11 @@ bool novokhatskiy::ComputerClub::hasAvailableTable() const {
             return true;
     }
     return false;
-    //return _tables.size() < _numTables;
 }
 
 bool novokhatskiy::ComputerClub::isTableTaken(size_t table) const {
     auto it = _tables.find(table);
     return it != _tables.end() && it->second.client.has_value();
-    //return _tables.find(table) != _tables.cend();
 }
 
 bool novokhatskiy::ComputerClub::isOpen() const {

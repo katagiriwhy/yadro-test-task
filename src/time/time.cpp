@@ -24,7 +24,7 @@ std::istream &novokhatskiy::operator>>(std::istream &in, novokhatskiy::Time &tim
 
 std::ostream &novokhatskiy::operator<<(std::ostream &out, const novokhatskiy::Time &time) {
     novokhatskiy::ScopeGuard scopeGuard(out);
-    out << std::setfill('0') << std::setw(2) << time.hours << ':' << std::setw(2) << time.minutes << '\n';
+    out << std::setfill('0') << std::setw(2) << time.hours << ':' << std::setw(2) << time.minutes;
     return out;
 }
 

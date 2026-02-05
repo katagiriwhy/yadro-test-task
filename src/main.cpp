@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
         auto event = std::make_unique<novokhatskiy::ClientEvent>();
         iStream >> event;
 
-        if ((!iStream) || (iStream >> rest)) {
+        if ((!iStream) || (iStream >> rest) || (event->getTime() < (events.back()->getTime()))) {
             std::cerr << line << '\n';
             return 1;
         }

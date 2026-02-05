@@ -55,7 +55,7 @@ namespace novokhatskiy {
         virtual void execute(ComputerClub& club) const override;
     };
 
-    class ClientSatEvent : ClientEvent {
+    class ClientSatEvent : public ClientEvent {
     public:
         ClientSatEvent(Time time, const std::string& name, size_t table, EventType type);
         size_t getTable() const;

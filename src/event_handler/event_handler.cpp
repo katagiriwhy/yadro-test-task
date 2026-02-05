@@ -90,6 +90,7 @@ std::istream &novokhatskiy::operator>>(std::istream &in, std::unique_ptr<ClientE
             size_t table = 0;
             in >> table;
             if (in && (table > 0)) {
+                event = std::make_unique<ClientSatEvent>(time, name, table, EventType::Incoming);
             }
             break;
         }
