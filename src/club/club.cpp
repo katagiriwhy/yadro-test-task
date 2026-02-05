@@ -66,7 +66,6 @@ size_t calculateHoursDiff(novokhatskiy::Time after, novokhatskiy::Time before) {
 size_t novokhatskiy::ComputerClub::updateIncome(const std::string &name) {
     for (auto& [tableNum, table] : _tables) {
         if (table.client && *table.client == name) {
-
             Time diff = _currentTime - table.busyFrom;
 
             table.busyMinutes += diff.hours * 60 + diff.minutes;
@@ -134,6 +133,5 @@ std::string novokhatskiy::ComputerClub::converTimeToString(size_t totalMinutes) 
     out << std::setw(2) << std::setfill('0') << hours << ':' << std::setw(2) << std::setfill('0') << minutes;
 
     return out.str();
-
 }
 
