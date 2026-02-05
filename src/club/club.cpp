@@ -113,3 +113,8 @@ std::string novokhatskiy::ComputerClub::getClientFromQueue() {
     return name;
 }
 
+void novokhatskiy::ComputerClub::executeEvent(const novokhatskiy::ClientEvent &event) {
+    _currentTime = event.getTime();
+    event.execute(*this);
+}
+

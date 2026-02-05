@@ -25,6 +25,7 @@ namespace novokhatskiy {
         ComputerClub(size_t tables, std::pair<Time, Time> workingTime, size_t price, std::ostream* output);
         ~ComputerClub();
 
+        void executeEvent(const ClientEvent& event);
         void addClient(const std::string& client);
         void addClientToQueue(const std::string& client);
         void printEvent(const Event& event) const;
