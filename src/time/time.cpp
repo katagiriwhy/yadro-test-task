@@ -1,5 +1,6 @@
 #include "time.hpp"
 #include <iomanip>
+#include <regex>
 #include "scope_guard/scope_guard.hpp"
 
 std::istream &novokhatskiy::operator>>(std::istream &in, novokhatskiy::Time &time) {
@@ -8,16 +9,18 @@ std::istream &novokhatskiy::operator>>(std::istream &in, novokhatskiy::Time &tim
         return in;
     }
 
-    unsigned int hours, minutes;
-    char colon;
+    std::string strTime = "";
+    in >> strTime;
+    std::regex regex("^([01][0-9]|2[0-3]):([0-5][0-9])$");
+    std::smatch match;
 
-    if (in >> hours >> colon >> minutes && colon == ':' && hours < 24 && minutes < 60) {
-        time.hours = static_cast<unsigned short>(hours);
-        time.minutes = static_cast<unsigned short>(minutes);
+    if (!std::regex_match(strTime, match, regex)) {
+        in.setstate(std::ios::failbit);
         return in;
     }
 
-    in.setstate(std::ios::failbit);
+    time.hours = std::stoi(match[1].str());
+    time.minutes = std::stoi(match[2].str());
 
     return in;
 }

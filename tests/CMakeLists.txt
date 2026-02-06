@@ -25,6 +25,10 @@ target_include_directories( ${PROJECT_NAME}_tests
         ${${PROJECT_NAME}-includes}
 )
 
+target_compile_definitions(${PROJECT_NAME}_tests
+        PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/input"
+)
+
 target_link_libraries(${PROJECT_NAME}_tests
         PRIVATE
         GTest::gtest
