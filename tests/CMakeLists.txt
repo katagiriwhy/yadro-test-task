@@ -13,6 +13,7 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME}_tests
         test_time.cpp
+        test_events.cpp
 )
 
 target_sources( ${PROJECT_NAME}_tests
